@@ -1,0 +1,24 @@
+[env]
+_.python.venv = { path = ".venv", create = true }
+MISE_PROJECT_ROOT = "."
+MISE_PROJECT_NAME = "playground"
+DJANGO_SETTINGS_MODULE = 'playground.settings'
+
+[settings]
+experimental = true
+
+[settings.python]
+uv_venv_auto = true
+
+[tools]
+podman = "latest"
+uv = "latest"
+python = "3.13"
+ruff = "latest"
+
+[tasks.server]
+run = 'uv run manage.py runserver'
+alias = ['s', 'default']
+
+[tasks.shell]
+run = 'uv run manage.py shell'
