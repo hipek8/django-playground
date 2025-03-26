@@ -13,4 +13,9 @@ wheels/
 *local.toml
 *local.py
 
+coverage.xml
+
 db.sqlite3
+.coverage
+
+static/

@@ -20,5 +20,32 @@ ruff = "latest"
 run = 'uv run manage.py runserver'
 alias = ['s', 'default']
 
-[tasks.shell]
-run = 'uv run manage.py shell'
+[tasks.checks]
+run = 'ruff check playground'
+
+[tasks.format]
+run = ['ruff format .', 'ruff check --fix playground']
+
+[tasks.test]
+run = 'coverage run manage.py test'
+
+[tasks.coverage]
+depends = ['test']
+run = ['coverage report', 'coverage xml']
+[tasks.ci]
+depends = ['checks', 'coverage']
+
+[tasks.wsgi]
+run = 'gunicorn --workers=20 playground.wsgi:application'
+depends = ['collectstatic']
+
+[tasks.asgi]
+run = 'uvicorn --workers=20 playground.asgi:application'
+depends = ['collectstatic']
+
+[tasks]
+shell = 'uv run manage.py shell'
+makemigrations = 'uv run manage.py makemigrations'
+migrate = 'uv run manage.py migrate'
+createsuperuser = 'uv run manage.py createsuperuser'
+collectstatic = 'uv run manage.py collectstatic'
