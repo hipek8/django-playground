@@ -27,7 +27,7 @@ run = 'ruff check playground'
 run = ['ruff format .', 'ruff check --fix playground']
 
 [tasks.test]
-run = 'coverage run manage.py test'
+run = 'uv run coverage run manage.py test'
 
 [tasks.coverage]
 depends = ['test']
@@ -49,3 +49,4 @@ makemigrations = 'uv run manage.py makemigrations'
 migrate = 'uv run manage.py migrate'
 createsuperuser = 'uv run manage.py createsuperuser'
 collectstatic = 'uv run manage.py collectstatic'
+manage = 'uv run manage.py'
