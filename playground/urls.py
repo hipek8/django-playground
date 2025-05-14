@@ -20,8 +20,10 @@ from django.urls import path, include
 
 from playground import settings
 from playground.items.urls import router as item_router
+from playground.proxy.views import api
 
 urlpatterns = [
     path('', include(item_router.urls)),
     path("admin/", admin.site.urls),
+    path('', api.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
