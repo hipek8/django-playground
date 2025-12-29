@@ -10,5 +10,6 @@ class ItemViewSet(ModelViewSet):
         class Meta:
             model = Item
             fields = "__all__"
+
     queryset = Item.objects.all()
     serializer_class = ItemSerializer

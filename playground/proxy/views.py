@@ -1,9 +1,11 @@
-from ninja import NinjaAPI, Schema
+from ninja import Schema, Router
 from django.shortcuts import get_object_or_404
+from ninja.pagination import paginate, RouterPaginated
+
 from .models import VM
 
 
-api = NinjaAPI()
+api = RouterPaginated()
 
 
 class VMIn(Schema):

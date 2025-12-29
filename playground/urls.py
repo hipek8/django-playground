@@ -14,16 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from ninja import NinjaAPI, Swagger
 
 from playground import settings
 from playground.items.urls import router as item_router
 from playground.proxy.views import api
 
+ninja_api = NinjaAPI(docs=Swagger(), docs_url="/")
+ninja_api.add_router("", api)
+
 urlpatterns = [
-    path('', include(item_router.urls)),
+    path("", ninja_api.urls),
+    path("", include(item_router.urls)),
     path("admin/", admin.site.urls),
-    path('', api.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

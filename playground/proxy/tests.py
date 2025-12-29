@@ -2,7 +2,7 @@ from django.test import TestCase
 from factory import Sequence
 from factory.django import DjangoModelFactory
 
-from playground.proxy.models import VM, DCAsset, DCHost
+from playground.proxy.models import VM, DCAsset
 
 
 # Create your tests here.
@@ -11,14 +11,15 @@ from playground.proxy.models import VM, DCAsset, DCHost
 class VMFactory(DjangoModelFactory):
     class Meta:
         model = VM
-        django_get_or_create = ('hostname',)
+        django_get_or_create = ("hostname",)
 
     hostname = Sequence(lambda n: f"VM {n}")
+
 
 class DCAssetFactory(DjangoModelFactory):
     class Meta:
         model = DCAsset
-        django_get_or_create = ('hostname',)
+        django_get_or_create = ("hostname",)
 
     hostname = Sequence(lambda n: f"DCA {n}")
 

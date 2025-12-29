@@ -2,7 +2,16 @@
 _.python.venv = { path = ".venv", create = true }
 MISE_PROJECT_ROOT = "."
 MISE_PROJECT_NAME = "playground"
+PROJECT_NAME = 'playground'
+
 DJANGO_SETTINGS_MODULE = 'playground.settings'
+
+DATABASE_USER = 'playground'
+DATABASE_PASSWORD = 'playground'
+DATABASE_NAME = 'playground'
+DATABASE_HOST = 'localhost'
+DATABASE_PORT = 5432
+
 
 [settings]
 experimental = true
@@ -11,27 +20,31 @@ experimental = true
 uv_venv_auto = true
 
 [tools]
-podman = "latest"
 uv = "latest"
-python = "3.13"
-ruff = "latest"
+podman = "latest"
+postgres = "latest"
 
 [tasks.server]
 run = 'uv run manage.py runserver'
 alias = ['s', 'default']
+depends = ['db']
 
-[tasks.checks]
-run = 'ruff check playground'
-
-[tasks.format]
-run = ['ruff format .', 'ruff check --fix playground']
-
-[tasks.test]
-run = 'uv run coverage run manage.py test'
-
+[tasks.db]
+depends = ['up']
+hide = true
+run = """
+  export PGPASSWORD=$DATABASE_PASSWORD PGDATABASE=$DATABASE_NAME PGHOST=$DATABASE_HOST PGPORT=$DATABASE_PORT PGUSER=$DATABASE_USER
+  for i in {1..15}; do
+    echo "Checking DB connection..."
+    psql -c "SELECT 1" >/dev/null 2>&1 && exit 0
+    sleep 1
+  done
+  echo "Database not responding" && exit 1
+"""
 [tasks.coverage]
 depends = ['test']
 run = ['coverage report', 'coverage xml']
+
 [tasks.ci]
 depends = ['checks', 'coverage']
 
@@ -44,7 +57,16 @@ run = 'uvicorn --workers=20 playground.asgi:application'
 depends = ['collectstatic']
 
 [tasks]
+up = 'podman compose -p $PROJECT_NAME up -d'
+down = "podman compose -p $PROJECT_NAME down"
+rebuild = "podman compose -p $PROJECT_NAME build"
+
+checks = 'ruff check playground'
+format = ['ruff format .', 'ruff check --fix playground']
+test = 'uv run coverage run manage.py test --parallel 1'
+
 shell = 'uv run manage.py shell'
+dbshell = 'uv run manage.py dbshell'
 makemigrations = 'uv run manage.py makemigrations'
 migrate = 'uv run manage.py migrate'
 createsuperuser = 'uv run manage.py createsuperuser'

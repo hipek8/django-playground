@@ -24,14 +24,13 @@ class ApiUser(HttpUser):
 
     @task
     def create_item(self):
-        payload = {
-            "name": f"Test Item {datetime.datetime.now()}"
-        }
+        payload = {"name": f"Test Item {datetime.datetime.now()}"}
         self.client.post("/items/", json=payload)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     env = Environment(user_classes=[ApiUser])
     env.create_local_runner()
     web_ui: WebUI = env.create_web_ui()
-    logger.warning("Starting locust server at %s:%s",web_ui.host, web_ui.port)
+    logger.warning("Starting locust server at %s:%s", web_ui.host, web_ui.port)
     env.web_ui.greenlet.join()

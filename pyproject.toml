@@ -3,15 +3,17 @@ name = "django-playground"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
-    "django==5.2rc1",
+    "django~=6.0",
     "django-filter>=25.1",
     "django-ninja>=1.4.1",
     "djangorestframework>=3.15.2",
     "factory-boy>=3.3.3",
     "gunicorn>=23.0.0",
     "markdown>=3.7",
+    "psycopg[binary,pool]>=3.3.2",
+    "ty>=0.0.5",
     "uvicorn>=0.34.0",
 ]
 
